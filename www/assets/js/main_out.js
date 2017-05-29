@@ -261,8 +261,8 @@
                     id = reader.getUint32();
                     if (0 === id) break;
 
-                    x = reader.getInt32();
-                    y = reader.getInt32();
+                    x = reader.getUint32();
+                    y = reader.getUint32();
                     size = reader.getUint16();
 
                     flags = reader.getUint8();
