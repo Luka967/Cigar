@@ -619,11 +619,15 @@
     function drawStats() {
         if (!stats.info) return stats.visible = false;
         stats.visible = true;
+	    
+	var myPosX = beginX + ((cameraX + border.width / 2) / border.width * width);
+        var myPosY = beginY + ((cameraY + border.height / 2) / border.height * height);
 
         var canvas = stats.canvas;
         var ctx = canvas.getContext("2d");
         ctx.font = "14px Ubuntu";
         var rows = [
+            `X: ${myPosX} Y: ${myPosY}`,
             `${stats.info.name} (${stats.info.mode})`,
             `${stats.info.playersTotal} / ${stats.info.playersLimit} players`,
             `${stats.info.playersAlive} playing`,
