@@ -970,6 +970,7 @@
             ctx.beginPath();
             if (this.jagged) {
                 var pointCount = 120;
+		    ctx.globalAlpha = 1; 
                 var incremental = PI_2 / pointCount;
                 ctx.moveTo(this.x, this.y + this.s + 3);
                 for (var i = 1; i < pointCount; i++) {
