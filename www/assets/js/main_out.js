@@ -620,6 +620,11 @@
         if (!stats.info) return stats.visible = false;
         stats.visible = true;
 	    
+	var width = 200 * (border.width / border.height);
+        var height = 200 * (border.height / border.width);
+        var beginX = mainCanvas.width / viewMult - width;
+        var beginY = mainCanvas.height / viewMult - height;
+	    
 	var myPosX = beginX + ((cameraX + border.width / 2) / border.width * width);
         var myPosY = beginY + ((cameraY + border.height / 2) / border.height * height);
 
