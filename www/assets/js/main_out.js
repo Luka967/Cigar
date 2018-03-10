@@ -501,6 +501,7 @@
         showColor: true,
         showSkins: true,
         showMinimap: true,
+        showBorders: true,
         darkTheme: false,
         allowGETipSet: false
     };
@@ -788,6 +789,21 @@
         mainCtx.restore();
     }
 
+    function drawBorders() {
+        if(!settings.showBorders) return;
+        mainCtx.strokeStyle = '#0000ff';
+        mainCtx.lineWidth = 20;
+        mainCtx.lineCap = "round";
+        mainCtx.lineJoin = "round";
+        mainCtx.beginPath();
+        mainCtx.moveTo(border.left, border.top);
+        mainCtx.lineTo(border.right, border.top);
+        mainCtx.lineTo(border.right, border.bottom);
+        mainCtx.lineTo(border.left, border.bottom);
+        mainCtx.closePath();
+        mainCtx.stroke();
+    };
+
     function drawGame() {
         stats.framesPerSecond += (1000 / Math.max(Date.now() - syncAppStamp, 1) - stats.framesPerSecond) / 10;
         syncAppStamp = Date.now();
@@ -804,6 +820,7 @@
         if (settings.showGrid) drawGrid();
 
         toCamera(mainCtx);
+        drawBorders();
 
         for (var i = 0, l = drawList.length; i < l; i++)
             drawList[i].draw(mainCtx);
