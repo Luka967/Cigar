@@ -1335,6 +1335,9 @@
     wHandle.setMinimap = function(a) {
         settings.showMinimap = !a;
     };
+    wHandle.setBorders = function(a) {
+        settings.showBorders = !a;
+    };
     wHandle.spectate = function(a) {
         wsSend(UINT8_CACHE[1]);
         stats.maxScore = 0;
