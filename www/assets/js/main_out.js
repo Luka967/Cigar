@@ -1,6 +1,6 @@
 (function(wHandle, wjQuery) {
     if (navigator.appVersion.indexOf("MSIE") != -1)
-	   alert("You're using a pretty old browser, some parts of the website might not work properly.");
+        alert("You're using a pretty old browser, some parts of the website might not work properly.");
 
     Date.now || (Date.now = function() {
         return (+new Date).getTime();
@@ -347,7 +347,7 @@
             case 0x63: // chat message
                 var flags = reader.getUint8();
                 var color = bytesToColor(reader.getUint8(), reader.getUint8(), reader.getUint8());
-                
+
                 var name = reader.getStringUTF8().trim();
                 var reg = /\{([\w]+)\}/.exec(name);
                 if (reg) name = name.replace(reg[0], "").trim();
@@ -569,7 +569,7 @@
         scaleBack(ctx);
         ctx.translate(-mainCanvas.width / 2, -mainCanvas.height / 2);
     }
-    
+
     function drawChat() {
         if (chat.messages.length === 0 && settings.showChat)
             return chat.visible = false;
@@ -763,15 +763,32 @@
             }
         }
 
-        var myPosX = beginX + ((cameraX + border.width / 2) / border.width * width);
-        var myPosY = beginY + ((cameraY + border.height / 2) / border.height * height);
-        mainCtx.fillStyle = "#FAA";
+        var xScaler = width / border.width;
+        var yScaler = height / border.height;
+        var halfWidth = border.width / 2;
+        var halfHeight = border.height / 2;
+        var myPosX = beginX + (cameraX + halfWidth) * xScaler;
+        var myPosY = beginY + (cameraY + halfHeight) * yScaler;
         mainCtx.beginPath();
-        mainCtx.arc(myPosX, myPosY, 5, 0, PI_2, false);
-        mainCtx.closePath();
+        if (cells.mine.length) {
+            for (var i = 0; i < cells.mine.length; i++) {
+                var cell = cells.byId[cells.mine[i]];
+                if (cell) {
+                    mainCtx.fillStyle = cell.color; // repeat assignment of same color is OK
+                    var x = beginX + (cell.x + halfWidth) * xScaler;
+                    var y = beginY + (cell.y + halfHeight) * yScaler;
+                    var r = cell.s * xScaler; // if map is square, both scalers should be the same
+                    mainCtx.moveTo(x + r, y);
+                    mainCtx.arc(x, y, r, 0, PI_2);
+                }
+            }
+        } else {
+            mainCtx.fillStyle = "#FAA";
+            mainCtx.arc(myPosX, myPosY, 5, 0, PI_2);
+        }
         mainCtx.fill();
 
-        // draw name above user's pos if he has a cell on the screen 
+        // draw name above user's pos if he has a cell on the screen
         var cell = null;
         for (var i = 0, l = cells.mine.length; i < l; i++)
             if (cells.byId.hasOwnProperty(cells.mine[i])) {
@@ -848,7 +865,7 @@
         cacheCleanup();
         wHandle.requestAnimationFrame(drawGame);
     }
-    
+
     function cellSort(a, b) {
         return a.s === b.s ? a.id - b.id : a.s - b.s;
     }
@@ -985,7 +1002,7 @@
             if (this.destroyed)
                 ctx.globalAlpha = Math.max(200 - Date.now() + this.dead, 0) / 100;
             else ctx.globalAlpha = Math.min(Date.now() - this.born, 200) / 100;
-            
+
             if (!this.ejected && 20 < this.s)
                 ctx.stroke();
             ctx.fill();
@@ -1133,7 +1150,7 @@
             var width = 0;
             for (var i = 0; i < value.length; i++)
                 width += canvases[value[i]].width - 2 * cache.lineWidth;
-            
+
             ctx.scale(correctionScale, correctionScale);
             x /= correctionScale;
             y /= correctionScale;
