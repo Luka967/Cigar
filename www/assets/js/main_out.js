@@ -489,6 +489,8 @@
     var mouseX = NaN;
     var mouseY = NaN;
     var mouseZ = 1;
+    var oldcameraX = null;
+    var oldcameraY = null;	
 
     var settings = {
         mobile: "createTouch" in document,
@@ -770,6 +772,16 @@
         mainCtx.arc(myPosX, myPosY, 5, 0, PI_2, false);
         mainCtx.closePath();
         mainCtx.fill();
+	// show the last place where player die in minimap (correct my english xD)  
+        if (oldcameraX, oldcameraY) {
+            var myPosX1 = beginX + ((oldcameraX + border.width / 2) / border.width * width);
+            var myPosY1 = beginY + ((oldcameraY + border.height / 2) / border.height * height);
+			mainCtx.fillStyle = settings.darkTheme ? "#DDD" : "#222";
+            mainCtx.beginPath();
+            mainCtx.arc(myPosX1, myPosY1, 5, 0, PI_2, false);
+			mainCtx.closePath();
+			mainCtx.fill();
+        }	    
 
         // draw name above user's pos if he has a cell on the screen 
         var cell = null;
@@ -912,7 +924,7 @@
         destroy: function(killerId) {
             delete cells.byId[this.id];
             if (cells.mine.remove(this.id) && cells.mine.length === 0)
-                showESCOverlay();
+                showESCOverlay(), oldcameraX = cameraX, oldcameraY = cameraY; //save this current camera position so we know where he die
             this.destroyed = true;
             this.dead = syncUpdStamp;
             if (killerId && !this.diedBy)
